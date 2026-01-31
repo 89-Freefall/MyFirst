@@ -11,9 +11,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		AE4B99CC2F2E54A300ADF911 /* MyFirst */ = {
+		AE4B99CC2F2E54A300ADF911 /* HITFit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MyFirst;
+			path = HITFit;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +32,7 @@
 		AE4B99C12F2E54A300ADF911 = {
 			isa = PBXGroup;
 			children = (
-				AE4B99CC2F2E54A300ADF911 /* MyFirst */,
+				AE4B99CC2F2E54A300ADF911 /* HITFit */,
 				AE4B99CB2F2E54A300ADF911 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +61,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AE4B99CC2F2E54A300ADF911 /* MyFirst */,
+				AE4B99CC2F2E54A300ADF911 /* HITFit */,
 			);
 			name = HITFit;
 			packageProductDependencies = (
