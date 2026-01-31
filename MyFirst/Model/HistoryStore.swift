@@ -5,14 +5,20 @@
 //  Created by William Adam Wickham on 1/31/26.
 //
 
-import SwiftUI
+import Foundation
 
-struct HistoryStore: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
+struct ExerciseDay: Identifiable {
+  let id = UUID()
+  let date: Date
+  var exercises: [String] = []
 }
 
-#Preview {
-    HistoryStore()
+struct HistoryStore {
+    var exerciseDays: [ExerciseDay] = []
+    
+    init() {
+        #if DEBUG
+        createDevData()
+        #endif
+    }
 }

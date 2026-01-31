@@ -5,14 +5,25 @@
 //  Created by William Adam Wickham on 1/31/26.
 //
 
-import SwiftUI
+import Foundation
 
-struct HistoryStoreDevData: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-#Preview {
-    HistoryStoreDevData()
+extension HistoryStore {
+  mutating func createDevData() {
+    // Development data
+    exerciseDays = [
+      ExerciseDay(
+        date: Date().addingTimeInterval(-86400),
+        exercises: [
+          Exercise.exercises[0].exerciseName,
+          Exercise.exercises[1].exerciseName,
+          Exercise.exercises[2].exerciseName
+        ]),
+      ExerciseDay(
+        date: Date().addingTimeInterval(-86400 * 2),
+        exercises: [
+          Exercise.exercises[1].exerciseName,
+          Exercise.exercises[0].exerciseName
+        ])
+    ]
+  }
 }
