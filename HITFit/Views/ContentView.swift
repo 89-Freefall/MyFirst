@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-  @State private var selectedTab = 9
+  @SceneStorage("selectedTab") private var selectedTab = 9
 
   var body: some View {
     TabView(selection: $selectedTab) {
@@ -20,9 +20,13 @@ struct ContentView: View {
       }
     }
     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+    .background(GradientBackground())
   }
 }
 
-#Preview {
-  ContentView()
+struct ContentView_Previews: PreviewProvider {
+  static var previews: some View {
+    ContentView()
+      .environmentObject(HistoryStore())
+  }
 }

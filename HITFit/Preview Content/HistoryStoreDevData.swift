@@ -5,10 +5,11 @@
 //  Created by William Adam Wickham on 1/31/26.
 //
 
+
 import Foundation
 
 extension HistoryStore {
-  mutating func createDevData() {
+  func createDevData() {
     // Development data
     exerciseDays = [
       ExerciseDay(

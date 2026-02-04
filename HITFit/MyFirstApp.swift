@@ -8,10 +8,28 @@
 import SwiftUI
 
 @main
-struct MyFirstApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+struct HIITFitApp: App {
+  @StateObject private var historyStore = HistoryStore()
+
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+        .environmentObject(historyStore)
+        .onAppear {
+          print(URL.documentsDirectory)
         }
+        .alert(
+          "History",
+          isPresented: $historyStore.loadingError) {
+            Button("OK") { }
+          } message: {
+            Text(
+              """
+                Unfortunately we can't load your past history.
+                Email support:
+                support@xyz.com
+                """)
+          }
     }
+  }
 }

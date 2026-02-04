@@ -9,72 +9,95 @@ import SwiftUI
 import AVKit
 
 struct ExerciseView: View {
-    @State private var showHistory = false
-    @State private var showSuccess = false
-    @State private var rating = 0
-    @Binding var selectedTab: Int
-    
-    
+  @EnvironmentObject var history: HistoryStore
+  @State private var showHistory = false
+  @State private var showSuccess = false
+  @State private var timerDone = false
+  @State private var showTimer = false
+  @Binding var selectedTab: Int
   let index: Int
   var exercise: Exercise {
     Exercise.exercises[index]
   }
-    var lastExercise: Bool {
-        index + 1 == Exercise.exercises.count
+  var lastExercise: Bool {
+    index + 1 == Exercise.exercises.count
+  }
+  var startButton: some View {
+    RaisedButton(buttonText: "Start Exercise") {
+      showTimer.toggle()
     }
-    var startButton: some View {
-        Button("Start Exercise") { }
+  }
+
+  var doneButton: some View {
+    Button("Done") {
+      history.addDoneExercise(Exercise.exercises[index].exerciseName)
+      timerDone = false
+      showTimer.toggle()
+      if lastExercise {
+        showSuccess.toggle()
+      } else {
+        selectedTab += 1
+      }
     }
-    
-    var doneButton: some View {
-        Button("Done") {
-            if lastExercise {
-                showSuccess.toggle()
-            } else {
-                selectedTab += 1
-            }
-        }
-    }
-  let interval: TimeInterval = 30
+  }
 
   var body: some View {
     GeometryReader { geometry in
       VStack {
-          HeaderView(selectedTab: $selectedTab, titleText: Exercise.exercises[index].exerciseName)
-          .padding(.bottom)
+        HeaderView(
+          selectedTab: $selectedTab,
+          titleText: Exercise.exercises[index].exerciseName)
+        .padding(.bottom)
 
         VideoPlayerView(videoName: exercise.videoName)
           .frame(height: geometry.size.height * 0.45)
 
-        Text(Date().addingTimeInterval(interval), style: .timer)
-          .font(.system(size: geometry.size.height * 0.07))
+        HStack(spacing: 150) {
+          startButton
+          doneButton
+            .disabled(!timerDone)
+            .sheet(isPresented: $showSuccess) {
+              SuccessView(selectedTab: $selectedTab)
+                .presentationDetents([.medium, .large])
+            }
+        }
+        .font(.title3)
+        .padding()
 
-          HStack(spacing: 150) {
-              startButton
-              doneButton
-                  .sheet(isPresented: $showSuccess) {
-                      SuccessView(selectedTab: $selectedTab)
-                  }
-              }
-          .font(.title3)
-          .padding()
-
-          RatingView(rating: $rating)
-          .padding()
-
+        if showTimer {
+          TimerView(
+            timerDone: $timerDone,
+            size: geometry.size.height * 0.07
+          )
+        }
         Spacer()
-        Button("History") {
-            showHistory.toggle()
-        }
+        RatingView(exerciseIndex: index)
+          .padding()
+
+        historyButton
         .sheet(isPresented: $showHistory) {
-            HistoryView(showHistory: $showHistory)
+          HistoryView(showHistory: $showHistory)
         }
-          .padding(.bottom)
+        .padding(.bottom)
       }
     }
+  }
+
+  var historyButton: some View {
+    Button(
+      action: {
+        showHistory = true
+      }, label: {
+        Text("History")
+          .fontWeight(.bold)
+          .padding([.leading, .trailing], 5)
+      })
+      .padding(.bottom, 10)
+      .buttonStyle(EmbossedButtonStyle())
   }
 }
 
 #Preview {
-    ExerciseView(selectedTab: .constant(3), index: 3)
+  ExerciseView(selectedTab: .constant(0), index: 0)
+    .environmentObject(HistoryStore())
 }

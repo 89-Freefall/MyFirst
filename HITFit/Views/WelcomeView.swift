@@ -8,51 +8,64 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    @State private var showHistory = false
-    @Binding var selectedTab: Int
-    
+  @State private var showHistory = false
+  @Binding var selectedTab: Int
+
   var body: some View {
-    ZStack {
-      VStack {
-          HeaderView(selectedTab: $selectedTab, titleText: "Welcome")
-        Spacer()
-        Button("History") {
-            showHistory.toggle()
-        }
-        .sheet(isPresented: $showHistory) {
-            HistoryView(showHistory: $showHistory)
-        }
-        .padding(.bottom)
-          
+    VStack {
+      HeaderView(
+        selectedTab: $selectedTab,
+        titleText: "Welcome")
+      .containerRelativeFrame(.vertical) { length, _ in
+        length * 0.2
       }
-      VStack {
-        HStack(alignment: .bottom) {
-          VStack(alignment: .leading) {
-            Text("Get fit")
-              .font(.largeTitle)
-            Text("with high intensity interval training")
-              .font(.headline)
+      ContainerView {
+        ViewThatFits {
+          VStack {
+            WelcomeView.images
+            WelcomeView.welcomeText
+            getStartedButton
+            Spacer()
+            historyButton
           }
-          Image("step-up")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(width: 240.0, height: 240.0)
-            .clipShape(Circle())
+          VStack {
+            WelcomeView.welcomeText
+            getStartedButton
+            Spacer()
+            historyButton
+          }
         }
-        Button(action: { selectedTab = 0 }) {
-          Text("Get Started")
-          Image(systemName: "arrow.right.circle")
-        }
-        .font(.title2)
-        .padding()
-        .background(
-          RoundedRectangle(cornerRadius: 20)
-          .stroke(Color.gray, lineWidth: 2))
+      }
+      .containerRelativeFrame(.vertical) { length, _ in
+        length * 0.8
       }
     }
+    .sheet(isPresented: $showHistory) {
+      HistoryView(showHistory: $showHistory)
+    }
+  }
+
+  var getStartedButton: some View {
+    RaisedButton(buttonText: "Get Started") {
+      selectedTab = 0
+    }
+    .padding()
+  }
+
+  var historyButton: some View {
+    Button(
+      action: {
+        showHistory = true
+      }, label: {
+        Text("History")
+          .fontWeight(.bold)
+          .padding([.leading, .trailing], 5)
+      })
+      .padding(.bottom, 10)
+      .buttonStyle(EmbossedButtonStyle())
   }
 }
 
 #Preview {
-    WelcomeView(selectedTab: .constant(9))
+  WelcomeView(selectedTab: .constant(9))
 }
